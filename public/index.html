@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DP Bank | The Future of Banking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=5">
+</head>
+
+<body>
+    <div id="notification" class="notification hidden"></div>
+
+    <!-- ==========================================
+         LANDING PAGE VIEW (Public Website) 
+         ========================================== -->
+    <div id="landing-view" class="view active landing-page">
+        <!-- Hero Section with Gradient Background -->
+        <div class="hero-wrapper">
+            <div class="hero-bg-curve"></div>
+
+            <!-- Top Navigation -->
+            <nav class="public-nav">
+                <div class="logo-small nav-logo" style="color: white;">
+                    <div class="logo-icon-small"
+                        style="background: white; -webkit-text-fill-color: var(--primary); padding: 0 8px; border-radius: 8px;">
+                        DP</div>
+                    <span>Bank</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#home">Home</a>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                </div>
+                <button id="nav-login-btn" class="accent-btn">Sign up</button>
+            </nav>
+
+            <!-- Hero Content -->
+            <header id="home" class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Smart banking<br>for everyone</h1>
+                    <p class="hero-subtitle">DP Bank is a revolutionary web app built to help you manage your money
+                        easily and save more.</p>
+                    <button id="hero-get-started-btn" class="primary-btn">Register Now &rarr;</button>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="floating-element el-1"></div>
+                    <div class="floating-element el-2"></div>
+                    <div class="floating-element el-3"></div>
+                    <div class="mockup-app">
+                        <div style="font-weight: 600; font-size: 14px; margin-bottom: 5px;">Credit Cards</div>
+                        <div class="mockup-card">
+                            <div style="font-size: 10px; opacity: 0.8;">1234 5678 9123 ****</div>
+                            <div style="font-size: 12px; margin-top: 30px; font-weight: 600;">Jane Cooper</div>
+                        </div>
+                        <div style="font-weight: 600; font-size: 14px; margin-top: 20px;">Send Money To</div>
+                        <div class="mockup-avatars">
+                            <div class="mockup-avatar"></div>
+                            <div class="mockup-avatar" style="background: var(--accent);"></div>
+                            <div class="mockup-avatar" style="background: var(--success);"></div>
+                            <div class="mockup-avatar" style="background: var(--primary);"></div>
+                        </div>
+                        <div style="font-weight: 600; font-size: 14px; margin-top: 30px;">Overview</div>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <div
+                                style="background: white; color: var(--error); border-radius: 20px; padding: 5px 10px; font-size: 12px; font-weight: bold;">
+                                -₹59</div>
+                            <div
+                                style="background: white; color: var(--success); border-radius: 20px; padding: 5px 10px; font-size: 12px; font-weight: bold;">
+                                +₹89</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+
+        <!-- Section 1: One card for all your payments -->
+        <section id="features" class="split-section">
+            <div class="split-content">
+                <h2>One card for all<br>your payments</h2>
+                <p>Get 3% back on everything you buy with the DP Bank card. Register today and enjoy every aspect of
+                    your finances.</p>
+            </div>
+            <div class="split-visual">
+                <div class="visual-card-large" style="background: linear-gradient(135deg, #a78bfa, #4c1d95);">
+                    <div style="font-size: 14px; opacity: 0.8;">DP Studios</div>
+                    <div style="font-size: 18px; margin-top: auto; font-weight: 600; font-family: monospace;">1234 ****
+                        **** 5678</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Manage your finances -->
+        <section class="split-section reverse">
+            <div class="split-content">
+                <h2>Manage your<br>finances like a<br>pro in no time</h2>
+                <p>With DP Bank, book keeping, banking, and invoices are all in one place. You will always know where
+                    you stand.</p>
+                <a href="#pricing" class="primary-btn" style="width: max-content;">Learn more &rarr;</a>
+            </div>
+            <div class="split-visual">
+                <div class="visual-stats">
+                    <div class="visual-stats-row">
+                        <div class="stat-box">
+                            <h4>Balance</h4>
+                            <div class="amount">₹5,600</div>
+                        </div>
+                        <div class="stat-box">
+                            <h4>Last transaction</h4>
+                            <div class="amount">₹230</div>
+                        </div>
+                    </div>
+                    <div class="stat-box"
+                        style="height: 150px; display: flex; align-items: flex-end; gap: 10px; padding-top: 40px; justify-content: space-around;">
+                        <div style="width: 15px; height: 60%; background: var(--primary); border-radius: 4px;"></div>
+                        <div style="width: 15px; height: 30%; background: var(--accent); border-radius: 4px;"></div>
+                        <div style="width: 15px; height: 80%; background: var(--primary); border-radius: 4px;"></div>
+                        <div style="width: 15px; height: 40%; background: #4299E1; border-radius: 4px;"></div>
+                        <div style="width: 15px; height: 100%; background: var(--primary); border-radius: 4px;"></div>
+                        <div style="width: 15px; height: 50%; background: var(--accent); border-radius: 4px;"></div>
+                        <div style="width: 15px; height: 70%; background: #4299E1; border-radius: 4px;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Support in 5 languages -->
+        <section class="split-section">
+            <div class="split-content">
+                <h2>We support you<br>in 5 different<br>languages</h2>
+                <p>Our support team is here to help you in 5 languages - English, French, Spanish, Polish, and German.
+                </p>
+                <div class="mockup-avatars" style="align-items: center;">
+                    <div class="mockup-avatar"
+                        style="background: #e2e8f0; margin-right: -20px; border: 2px solid white; position: relative; z-index: 1;">
+                    </div>
+                    <div class="mockup-avatar"
+                        style="background: #cbd5e1; margin-right: -20px; border: 2px solid white; position: relative; z-index: 2;">
+                    </div>
+                    <div class="mockup-avatar"
+                        style="background: #94a3b8; margin-right: -20px; border: 2px solid white; position: relative; z-index: 3;">
+                    </div>
+                    <div class="mockup-avatar"
+                        style="background: #64748b; border: 2px solid white; position: relative; z-index: 4;"></div>
+                    <span style="margin-left: 10px; color: var(--text-muted); font-weight: 600;">+20</span>
+                </div>
+            </div>
+            <div class="split-visual">
+                <div class="visual-chat">
+                    <div class="chat-bubble left">Hi Harven, How can I help you?</div>
+                    <div class="chat-bubble right">My credit card is stolen....</div>
+                    <div class="chat-bubble left">Ok. No problem. We will take care of this.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Pricing -->
+        <section id="pricing" class="pricing-section">
+            <h2>An exceptional service, <span>at the right place</span></h2>
+            <p style="color: var(--text-muted); margin-bottom: 60px;">Start with a free plan and switch to premium as
+                you grow.</p>
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="pricing-card">
+                    <h3>Free</h3>
+                    <div class="price">₹0<span>/m</span></div>
+                    <p class="desc">Manage your business with a simple and efficient account.</p>
+                    <button class="outline-btn" style="width: 100%; margin-bottom: 30px;">Get started</button>
+                    <div class="mockup-card" style="margin: 0; height: 80px;"></div>
+                    <ul class="pricing-features">
+                        <li>10 free local transfers</li>
+                        <li>Free ATM withdrawals up to ₹250</li>
+                        <li>Free payments to DP accounts</li>
+                        <li>Prepaid debit cards</li>
+                        <li class="disabled">Virtual cards</li>
+                        <li class="disabled">Priority 24/7 support</li>
+                        <li class="disabled">Exchange 24 currencies</li>
+                        <li class="disabled">Multi-user access</li>
+                    </ul>
+                </div>
+                <!-- Premium Plan -->
+                <div class="pricing-card">
+                    <h3>Premium</h3>
+                    <div class="price">₹10<span>/m</span></div>
+                    <p class="desc">Priority support and multi-user access to maximize your productivity.</p>
+                    <button class="outline-btn" style="width: 100%; margin-bottom: 30px;">Get started</button>
+                    <div class="mockup-card" style="margin: 0; height: 80px;"></div>
+                    <ul class="pricing-features">
+                        <li>10 free local transfers</li>
+                        <li>Free ATM withdrawals up to ₹250</li>
+                        <li>Free payments to DP accounts</li>
+                        <li>Prepaid debit cards</li>
+                        <li>Virtual cards</li>
+                        <li>Priority 24/7 support</li>
+                        <li>Exchange 24 currencies</li>
+                        <li>Multi-user access</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: FAQ -->
+        <section class="faq-section">
+            <h2>Frequently <span>asked questions</span></h2>
+            <p>If you are not sure whether DP Bank is suitable for you or not, do not worry. We are here to explain
+                everything you might want to know.</p>
+
+            <div class="faq-item">
+                <div class="faq-header">What is the difference between DP Bank and a traditional bank account? <span
+                        class="faq-icon">+</span></div>
+                <div class="faq-content">DP Bank provides instant real-time transfers using a simple 5-digit account
+                    number, an intuitive glassmorphic UI, and no hidden fees unlike traditional banks.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-header">Who can open a DP Bank account? <span class="faq-icon">+</span></div>
+                <div class="faq-content">Anyone worldwide can open a DP Bank account in seconds and get instant access
+                    to our features and ₹1000 starting bonus.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-header">What if I withdraw money abroad? <span class="faq-icon">+</span></div>
+                <div class="faq-content">With our Premium plan, there are zero foreign transaction fees, allowing you to
+                    withdraw money anywhere globally for free.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-header">Can I cancel my subscription or switch to another plan any time? <span
+                        class="faq-icon">+</span></div>
+                <div class="faq-content">Yes, you can upgrade, downgrade, or cancel your subscription at any time
+                    without any penalties.</div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="public-footer">
+            <div class="footer-grid">
+                <div style="flex: 1; min-width: 250px;">
+                    <div class="logo-small nav-logo" style="margin-bottom: 20px;">
+                        <div class="logo-icon-small"
+                            style="background: var(--primary); -webkit-text-fill-color: white; padding: 0 8px; border-radius: 8px;">
+                            DP</div>
+                        <span style="color: var(--text-main);">Bank</span>
+                    </div>
+                    <div style="margin-top: 40px; font-size: 13px; color: var(--text-muted);">
+                        Copyright © 2026 DP Bank LLC.<br>All rights reserved.
+                    </div>
+                </div>
+                <div class="footer-links" style="flex: 2;">
+                    <div class="footer-col">
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Team</a>
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Press</a>
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Fees</a>
+                    </div>
+                    <div class="footer-col">
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Services</a>
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Projects</a>
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Affiliate</a>
+                    </div>
+                    <div class="footer-col">
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Terms
+                            of use</a>
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Privacy
+                            Policy</a>
+                        <a href="#"
+                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Contact
+                            us</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ==========================================
+         AUTHENTICATION VIEW (Login/Signup)
+         ========================================== -->
+    <div id="auth-view" class="view hidden">
+        <div class="glass-card auth-card">
+            <!-- Moved Back Button Inside Auth Card -->
+            <button id="back-to-home-btn" class="text-btn back-btn">← Back to Home</button>
+
+            <div class="logo-container" style="margin-top: 20px;">
+                <div class="logo-icon">DP</div>
+                <h1 style="font-size: 24px;">Bank</h1>
+            </div>
+
+            <p class="subtitle" id="form-title">Log in to your account</p>
+
+            <form id="auth-form">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Enter username">
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" required placeholder="Enter password">
+                        <button type="button" class="eye-toggle" aria-label="Toggle password visibility">
+                            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <line class="eye-slash" x1="2" y1="2" x2="22" y2="22"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;" id="forgot-password-wrapper">
+                        <button type="button" id="show-forgot-btn" class="text-btn"
+                            style="font-size: 12px; font-weight: 500;">Forgot Password?</button>
+                    </div>
+                </div>
+
+                <!-- Replaced large-btn padding with a smaller standard button -->
+                <button type="submit" id="submit-btn" class="primary-btn auth-submit-btn">Log In</button>
+            </form>
+
+            <form id="forgot-password-form" class="hidden">
+                <div class="input-group">
+                    <label for="forgot-username">Username</label>
+                    <input type="text" id="forgot-username" required placeholder="Enter username">
+                </div>
+                <div class="input-group">
+                    <label for="forgot-new-password">New Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="forgot-new-password" required placeholder="Enter new password">
+                        <button type="button" class="eye-toggle" aria-label="Toggle password visibility">
+                            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <line class="eye-slash" x1="2" y1="2" x2="22" y2="22"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" id="forgot-submit-btn" class="primary-btn auth-submit-btn">Reset Password</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button type="button" id="back-to-login-btn" class="text-btn">Back to Login</button>
+                </div>
+            </form>
+
+            <div class="toggle-mode">
+                <span id="toggle-text">Don't have an account?</span>
+                <button type="button" id="toggle-btn" class="text-btn">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         DASHBOARD VIEW (Private Portal)
+         ========================================== -->
+    <div id="dashboard-view" class="view hidden">
+        <div class="dashboard-layout">
+
+            <!-- Left Sidebar -->
+            <aside class="sidebar glass-card">
+                <div class="logo-small" style="margin-bottom: 40px;">
+                    <div class="logo-icon-small">DP</div>
+                    <span>Bank</span>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-target="panel-home">
+                        <span class="nav-icon">⌂</span> Home
+                    </button>
+                    <button class="nav-item" data-target="panel-transactions">
+                        <span class="nav-icon">📋</span> Transactions
+                    </button>
+                    <button class="nav-item" data-target="panel-transfer">
+                        <span class="nav-icon">↗</span> Send Money
+                    </button>
+                    <button class="nav-item" data-target="panel-deposit">
+                        <span class="nav-icon">↓</span> Add Funds
+                    </button>
+                </nav>
+
+                <button id="logout-btn" class="text-btn outline logout-sidebar">Log Out</button>
+            </aside>
+
+            <!-- Main Content Area (Center) -->
+            <main class="main-content">
+
+                <!-- Home Panel -->
+                <div id="panel-home" class="content-panel active">
+                    <header class="welcome-header">
+                        <h2 style="font-size: 26px; font-weight: 800;">Welcome back, <span id="user-display-name"
+                                style="color: var(--primary);">User</span></h2>
+                        <p style="color: var(--text-muted); margin-top: 5px;">Here is your complete financial summary.
+                        </p>
+                    </header>
+
+                    <!-- Virtual Card for Total Balance -->
+                    <div class="virtual-card-container" style="margin-bottom: 40px;">
+                        <div class="virtual-card">
+                            <div class="card-top">
+                                <span class="card-chip"></span>
+                                <span class="card-logo"> DP </span>
+                            </div>
+                            <div class="card-middle">
+                                <h3
+                                    style="font-size: 14px; opacity: 0.9; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px;">
+                                    Total Balance</h3>
+                                <h1 id="account-balance"
+                                    style="font-size: 48px; font-weight: 800; letter-spacing: -1px;">₹0.00</h1>
+                            </div>
+                            <div class="card-bottom">
+                                <div class="card-details">
+                                    <div style="font-size: 10px; opacity: 0.8; text-transform: uppercase;">Card Holder
+                                    </div>
+                                    <div id="virtual-card-name"
+                                        style="font-size: 15px; font-weight: 600; font-family: monospace;">---</div>
+                                </div>
+                                <div class="card-details">
+                                    <div style="font-size: 10px; opacity: 0.8; text-transform: uppercase;">Valid Thru
+                                    </div>
+                                    <div style="font-size: 15px; font-weight: 600; font-family: monospace;">12/29</div>
+                                </div>
+                                <div class="card-network">
+                                    <div class="circle red"></div>
+                                    <div class="circle yellow"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-quick-stats">
+                            <div class="stat-pill"><span class="status-dot"></span> Active</div>
+                        </div>
+                    </div>
+
+                    <!-- New Account Information Section -->
+                    <h3
+                        style="font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">
+                        Account Details</h3>
+                    <div class="account-details" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <div class="glass-card account-detail-card">
+                            <h4>Account Type</h4>
+                            <p>DP Black</p>
+                        </div>
+                        <div class="glass-card account-detail-card">
+                            <h4>Account Number</h4>
+                            <p id="display-account-number" style="font-family: monospace;">-----</p>
+                        </div>
+                        <div class="glass-card account-detail-card"
+                            style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none;">
+                            <h4 style="color: rgba(255,255,255,0.8);">Reward Points</h4>
+                            <p style="color: white; font-size: 24px;">4,250 <span
+                                    style="font-size: 14px; font-weight: 500;">pts</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Panel -->
+                <div id="panel-transactions" class="content-panel hidden">
+                    <header class="welcome-header">
+                        <h2 style="font-size: 22px;">Transaction History</h2>
+                        <p>Real-time updates of your recent activity.</p>
+                    </header>
+                    <div class="glass-card transactions-container" id="transactions-list">
+                        <div class="loading-text">Loading transactions...</div>
+                    </div>
+                </div>
+
+                <!-- Send Money Panel -->
+                <div id="panel-transfer" class="content-panel hidden">
+                    <header class="welcome-header">
+                        <h2 style="font-size: 22px;">Send Money</h2>
+                        <p>Transfer funds to another DP Bank user instantly.</p>
+                    </header>
+                    <div class="glass-card form-container">
+                        <form id="transfer-form">
+                            <div class="input-group">
+                                <label for="transfer-to">Recipient Account Number (5-digits)</label>
+                                <input type="text" id="transfer-to" required placeholder="Enter 5-digit account number"
+                                    pattern="[0-9]{5}">
+                            </div>
+                            <div class="input-group">
+                                <label for="transfer-amount">Amount (₹)</label>
+                                <input type="number" id="transfer-amount" required placeholder="0.00" min="0.01"
+                                    step="0.01">
+                            </div>
+                            <button type="submit" class="primary-btn auth-submit-btn">Confirm Transfer</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Add/Withdraw Funds Panel -->
+                <div id="panel-deposit" class="content-panel hidden">
+                    <header class="welcome-header">
+                        <h2 style="font-size: 22px;">Manage Funds</h2>
+                        <p>Simulate adding or withdrawing money from your account.</p>
+                    </header>
+
+                    <div class="funds-split">
+                        <div class="glass-card form-container">
+                            <h3>Deposit</h3>
+                            <form id="deposit-form">
+                                <div class="input-group">
+                                    <input type="number" id="deposit-amount" required placeholder="Amount to deposit"
+                                        min="1" step="1">
+                                </div>
+                                <button type="submit" class="primary-btn auth-submit-btn"
+                                    style="background: linear-gradient(135deg, #10b981, #059669);">Simulate
+                                    Deposit</button>
+                            </form>
+                        </div>
+
+                        <div class="glass-card form-container">
+                            <h3>Withdraw</h3>
+                            <form id="withdraw-form">
+                                <div class="input-group">
+                                    <input type="number" id="withdraw-amount" required placeholder="Amount to withdraw"
+                                        min="1" step="1">
+                                </div>
+                                <button type="submit" class="primary-btn auth-submit-btn"
+                                    style="background: linear-gradient(135deg, #f43f5e, #e11d48);">Simulate
+                                    Withdraw</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js?v=2"></script>
+</body>
+
+</html>
