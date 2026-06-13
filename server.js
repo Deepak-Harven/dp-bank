@@ -16,12 +16,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 class DatabaseAdapter {
     constructor() {
-        this.isPostgres = !!process.env.DATABASE_URL;
+        this.isPostgres = !!(process.env.RENDER || process.env.DATABASE_URL);
         if (this.isPostgres) {
             console.log('Using PostgreSQL database.');
             const { Pool } = require('pg');
+            const connectionString = process.env.DATABASE_URL || 'postgres://neondb_owner:npg_cRSZNq3BgMQ4@ep-curly-meadow-aofiii1h-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
             this.pool = new Pool({
-                connectionString: process.env.DATABASE_URL,
+                connectionString: connectionString,
                 ssl: {
                     rejectUnauthorized: false
                 }
