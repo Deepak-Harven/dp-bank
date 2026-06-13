@@ -2,6 +2,10 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path');
+const crypto = require('crypto');
+
+const userSessions = {};
+const agentSessions = {};
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +36,15 @@ const db = new sqlite3.Database('./database.db', (err) => {
             amount REAL,
             description TEXT,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`);
+
+        db.run(`CREATE TABLE IF NOT EXISTS contact_messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            email TEXT,
+            message TEXT,
+            status TEXT DEFAULT 'unread',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`);
     }
 });
@@ -75,8 +88,23 @@ app.post('/api/login', (req, res) => {
     db.get(`SELECT * FROM users WHERE username = ? AND password = ?`, [username, password], (err, row) => {
         if (err) return res.status(500).json({ error: 'Database error' });
         if (!row) return res.status(401).json({ error: 'Invalid credentials' });
+        // Generate a token
+        const token = crypto.randomBytes(32).toString('hex');
+        userSessions[token] = row.username;
         // Return account number as well
-        res.status(200).json({ username: row.username, balance: row.balance, accountNumber: row.account_number });
+        res.status(200).json({ token, username: row.username, balance: row.balance, accountNumber: row.account_number });
+    });
+});
+
+// 2.5 Verify User Session
+app.post('/api/verify-session', (req, res) => {
+    const { token } = req.body;
+    const username = userSessions[token];
+    if (!username) return res.status(401).json({ error: 'Invalid token' });
+    
+    db.get(`SELECT balance, account_number FROM users WHERE username = ?`, [username], (err, row) => {
+        if (err || !row) return res.status(401).json({ error: 'User not found' });
+        res.status(200).json({ username, balance: row.balance, accountNumber: row.account_number });
     });
 });
 
@@ -176,6 +204,95 @@ app.post('/api/transfer', (req, res) => {
             });
         });
     });
+});
+
+// 7. Agent Login
+let agentPassword = 'securepassword';
+const AGENT_CODE = 'AGENT007';
+
+app.post('/api/agent-login', (req, res) => {
+    const { agentCode, password } = req.body;
+    if (agentCode === AGENT_CODE && password === agentPassword) {
+        const token = crypto.randomBytes(32).toString('hex');
+        agentSessions[token] = agentCode;
+        res.status(200).json({ success: true, token });
+    } else {
+        res.status(401).json({ error: 'Invalid agent credentials' });
+    }
+});
+
+app.post('/api/agent-verify-session', (req, res) => {
+    const { token } = req.body;
+    if (agentSessions[token] === AGENT_CODE) {
+        res.status(200).json({ success: true });
+    } else {
+        res.status(401).json({ error: 'Invalid token' });
+    }
+});
+
+app.post('/api/agent-reset-password', (req, res) => {
+    const { agentCode, newPassword } = req.body;
+    if (agentCode === AGENT_CODE) {
+        agentPassword = newPassword;
+        res.status(200).json({ message: 'Agent password reset successfully' });
+    } else {
+        res.status(401).json({ error: 'Invalid agent code' });
+    }
+});
+
+// 8. Agent Get All Users
+app.get('/api/admin/users', (req, res) => {
+    db.all(`SELECT id, username, balance, account_number FROM users`, [], (err, rows) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.status(200).json(rows);
+    });
+});
+
+// 9. Submit contact message (Public)
+app.post('/api/contact', (req, res) => {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+    db.run(
+        `INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)`,
+        [name, email, message],
+        function(err) {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.status(201).json({ message: 'Message sent successfully' });
+        }
+    );
+});
+
+// 10. Get all contact messages (Agent only, protected)
+app.get('/api/contact-messages', (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token || agentSessions[token] !== AGENT_CODE) {
+        return res.status(401).json({ error: 'Unauthorized agent access' });
+    }
+    db.all(`SELECT * FROM contact_messages ORDER BY created_at DESC`, [], (err, rows) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        res.status(200).json(rows);
+    });
+});
+
+// 11. Mark contact message as read (Agent only, protected)
+app.put('/api/contact-messages/:id/read', (req, res) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token || agentSessions[token] !== AGENT_CODE) {
+        return res.status(401).json({ error: 'Unauthorized agent access' });
+    }
+    const { id } = req.params;
+    db.run(
+        `UPDATE contact_messages SET status = 'read' WHERE id = ?`,
+        [id],
+        function(err) {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.status(200).json({ message: 'Message marked as read' });
+        }
+    );
 });
 
 app.listen(PORT, () => {

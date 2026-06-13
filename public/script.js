@@ -125,6 +125,7 @@ authForm.addEventListener('submit', async (e) => {
         if (isLoginMode) {
             currentUsername = data.username;
             currentAccountNumber = data.accountNumber;
+            localStorage.setItem('auth_token', data.token);
             updateBalanceUI(data.balance);
             switchView(authView, dashboardView);
             loadTransactions();
@@ -195,6 +196,7 @@ if (forgotPasswordForm) {
 
 // Logout
 logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('auth_token');
     currentUsername = null;
     currentAccountNumber = null;
     switchView(dashboardView, landingView); // Go all the way back to landing page
@@ -248,7 +250,7 @@ navItems.forEach(btn => {
         document.getElementById(targetId).classList.remove('hidden');
         document.getElementById(targetId).classList.add('active');
 
-        if (targetId === 'panel-transactions') loadTransactions();
+        if (targetId === 'panel-home') loadTransactions();
     });
 });
 
@@ -350,3 +352,217 @@ document.querySelectorAll('.faq-item').forEach(item => {
         item.classList.toggle('active');
     });
 });
+
+// ------------------------------------
+// Agent Authentication Logic
+// ------------------------------------
+
+const agentAuthView = document.getElementById('agent-auth-view');
+const navAgentLoginBtn = document.getElementById('nav-agent-login-btn');
+const agentBackToHomeBtn = document.getElementById('agent-back-to-home-btn');
+
+const agentAuthForm = document.getElementById('agent-auth-form');
+const agentForgotPasswordForm = document.getElementById('agent-forgot-password-form');
+const agentShowForgotBtn = document.getElementById('agent-show-forgot-btn');
+const agentBackToLoginBtn = document.getElementById('agent-back-to-login-btn');
+const agentFormTitle = document.getElementById('agent-form-title');
+
+if (navAgentLoginBtn) {
+    navAgentLoginBtn.addEventListener('click', () => {
+        if (agentFormTitle) agentFormTitle.textContent = 'Agent Portal Access';
+        if (agentAuthForm) agentAuthForm.style.display = 'block';
+        if (agentForgotPasswordForm) agentForgotPasswordForm.style.display = 'none';
+        switchView(landingView, agentAuthView);
+    });
+}
+
+if (agentBackToHomeBtn) {
+    agentBackToHomeBtn.addEventListener('click', () => {
+        switchView(agentAuthView, landingView);
+    });
+}
+
+if (agentShowForgotBtn) {
+    agentShowForgotBtn.addEventListener('click', () => {
+        agentFormTitle.textContent = 'Reset Agent Password';
+        agentAuthForm.style.display = 'none';
+        agentForgotPasswordForm.style.display = 'block';
+    });
+}
+
+if (agentBackToLoginBtn) {
+    agentBackToLoginBtn.addEventListener('click', () => {
+        agentFormTitle.textContent = 'Agent Portal Access';
+        agentAuthForm.style.display = 'block';
+        agentForgotPasswordForm.style.display = 'none';
+    });
+}
+
+if (agentAuthForm) {
+    agentAuthForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const agentCode = document.getElementById('agent-code').value.trim();
+        const password = document.getElementById('agent-password').value;
+        
+        try {
+            const response = await fetch('/api/agent-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agentCode, password })
+            });
+            const data = await response.json();
+            
+            if (!response.ok) return showNotification(data.error, 'error');
+            
+            // Redirect to agent dashboard
+            localStorage.setItem('agent_token', data.token);
+            window.location.href = 'agent-dashboard.html';
+        } catch (error) {
+            showNotification('Cannot connect to server.', 'error');
+        }
+    });
+}
+
+if (agentForgotPasswordForm) {
+    agentForgotPasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const agentCode = document.getElementById('agent-forgot-code').value.trim();
+        const newPassword = document.getElementById('agent-forgot-new-password').value;
+        
+        try {
+            const response = await fetch('/api/agent-reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agentCode, newPassword })
+            });
+            const data = await response.json();
+            
+            if (!response.ok) return showNotification(data.error, 'error');
+            
+            showNotification(data.message, 'success');
+            document.getElementById('agent-forgot-code').value = '';
+            document.getElementById('agent-forgot-new-password').value = '';
+            agentBackToLoginBtn.click();
+        } catch (error) {
+            showNotification('Cannot connect to server.', 'error');
+        }
+    });
+}
+
+// Refresh Button Logic
+const userRefreshBtn = document.getElementById('user-refresh-btn');
+if (userRefreshBtn) {
+    userRefreshBtn.addEventListener('click', () => {
+        // Simple spin animation
+        userRefreshBtn.style.transition = 'transform 0.4s ease';
+        userRefreshBtn.style.transform = 'rotate(360deg)';
+        setTimeout(() => {
+            userRefreshBtn.style.transition = 'none';
+            userRefreshBtn.style.transform = 'none';
+        }, 400);
+        
+        loadTransactions();
+    });
+}
+
+// Session Persistence Logic
+window.addEventListener('DOMContentLoaded', async () => {
+    const agentToken = localStorage.getItem('agent_token');
+    if (agentToken) {
+        try {
+            const res = await fetch('/api/agent-verify-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: agentToken })
+            });
+            if (res.ok) {
+                window.location.href = 'agent-dashboard.html';
+                return;
+            } else {
+                localStorage.removeItem('agent_token');
+            }
+        } catch(e) {}
+    }
+
+    const authToken = localStorage.getItem('auth_token');
+    if (authToken) {
+        try {
+            const res = await fetch('/api/verify-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: authToken })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                currentUsername = data.username;
+                currentAccountNumber = data.accountNumber;
+                updateBalanceUI(data.balance);
+                
+                document.querySelectorAll('.view').forEach(v => {
+                    v.classList.remove('active');
+                    v.classList.add('hidden');
+                });
+                dashboardView.classList.remove('hidden');
+                dashboardView.classList.add('active');
+                
+                loadTransactions();
+            } else {
+                localStorage.removeItem('auth_token');
+            }
+        } catch(e) {}
+    }
+});
+
+// Footer Contact Form Submission Handler
+const footerContactForm = document.getElementById('footer-contact-form');
+const contactFormStatus = document.getElementById('contact-form-status');
+
+if (footerContactForm) {
+    footerContactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('contact-name').value.trim();
+        const email = document.getElementById('contact-email').value.trim();
+        const message = document.getElementById('contact-message').value.trim();
+        
+        if (contactFormStatus) {
+            contactFormStatus.textContent = "Sending...";
+            contactFormStatus.style.color = "#cbd5e1";
+        }
+        
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message })
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+                if (contactFormStatus) {
+                    contactFormStatus.textContent = "✅ Message sent successfully!";
+                    contactFormStatus.style.color = "var(--success)";
+                }
+                // Clear fields
+                document.getElementById('contact-name').value = '';
+                document.getElementById('contact-email').value = '';
+                document.getElementById('contact-message').value = '';
+                
+                // Clear success notification after 4 seconds
+                setTimeout(() => {
+                    if (contactFormStatus) contactFormStatus.textContent = '';
+                }, 4000);
+            } else {
+                if (contactFormStatus) {
+                    contactFormStatus.textContent = "❌ Something went wrong. Try again.";
+                    contactFormStatus.style.color = "var(--error)";
+                }
+            }
+        } catch (error) {
+            if (contactFormStatus) {
+                contactFormStatus.textContent = "❌ Cannot connect to server. Try again.";
+                contactFormStatus.style.color = "var(--error)";
+            }
+        }
+    });
+}

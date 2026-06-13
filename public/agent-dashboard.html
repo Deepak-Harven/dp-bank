@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard | DP Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .agent-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+        }
+        
+        /* Premium Header Styling */
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+        
+        .header-welcome {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            padding: 8px 16px;
+            background: rgba(122, 82, 244, 0.1);
+            border-radius: 30px;
+        }
+
+        /* Summary Cards Grid */
+        .summary-cards-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -5px rgba(122, 82, 244, 0.1);
+        }
+
+        .card-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        /* Color variations for card icons */
+        .icon-users { background: rgba(122, 82, 244, 0.1); color: var(--primary); }
+        .icon-balance { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .icon-accounts { background: rgba(66, 153, 225, 0.1); color: #4299E1; }
+        .icon-time { background: rgba(255, 107, 107, 0.1); color: var(--accent); }
+
+        .card-content h3 {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-content .card-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--bg-dark);
+        }
+
+        /* Search Section */
+        .search-container {
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-bar {
+            flex: 1;
+            padding: 14px 20px;
+            background: white;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--text-main);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-bar:focus {
+            border-color: var(--primary);
+            box-shadow: 0 4px 20px rgba(122, 82, 244, 0.15);
+        }
+
+        /* Redesigned Users Table */
+        .table-wrapper {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        .users-table th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 18px 24px;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #edf2f7;
+        }
+
+        .users-table td {
+            padding: 18px 24px;
+            border-bottom: 1px solid #edf2f7;
+            color: var(--text-main);
+            font-size: 15px;
+        }
+
+        .users-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .users-table tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        .users-table tr {
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .users-table tr:hover td {
+            background: rgba(122, 82, 244, 0.03) !important;
+        }
+
+        /* Accent-colored, bold balance */
+        .balance-accent {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Actions Column Buttons */
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-view {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-view:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(122, 82, 244, 0.2);
+        }
+
+        .btn-download-pdf {
+            background: var(--success);
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-download-pdf:hover {
+            background: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Premium Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 32, 44, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-container {
+            background: white;
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 650px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 35px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 15px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--error);
+        }
+
+        .modal-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--bg-dark);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-left: 3px solid var(--primary);
+            padding-left: 10px;
+        }
+
+        .user-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        .info-item h4 {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .info-item p {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Modal Table styling */
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .modal-table th {
+            text-align: left;
+            padding: 12px 16px;
+            color: var(--text-muted);
+            border-bottom: 2px solid #edf2f7;
+        }
+
+        .modal-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .modal-table tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        /* Unread Badge */
+        .unread-badge {
+            background: var(--error);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 20px;
+            margin-left: auto;
+            min-width: 18px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+        }
+        
+        .unread-badge.hidden {
+            display: none !important;
+        }
+
+        .content-panel {
+            display: none;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        .content-panel.hidden {
+            display: none !important;
+        }
+
+        /* Styling for Mark as Read button */
+        .btn-read {
+            background: transparent;
+            border: 1.5px solid var(--success);
+            color: var(--success);
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-read:hover {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-read:disabled {
+            border-color: var(--text-muted);
+            color: var(--text-muted);
+            background: transparent;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+
+        .status-pill-message {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+        
+        .status-pill-message.unread {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .status-pill-message.read {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+    </style>
+</head>
+<body style="background-image: radial-gradient(circle at 10% 20%, rgba(122, 82, 244, 0.08) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.08) 0%, transparent 40%); background-attachment: fixed; min-height: 100vh; display: flex; align-items: stretch; padding: 20px;">
+    <div id="notification" class="notification hidden"></div>
+    
+    <div class="dashboard-layout">
+        <!-- Left Sidebar -->
+        <aside class="sidebar glass-card">
+            <div class="logo-small" style="margin-bottom: 40px; color: var(--text-main);">
+                <div class="logo-icon-small">DP</div>
+                <span>Bank</span>
+                <span style="font-size: 10px; font-weight: bold; margin-left: 6px; padding: 2px 5px; background: var(--accent); color: white; border-radius: 4px; vertical-align: middle;">AGENT</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-target="panel-users">
+                    <span class="nav-icon">👥</span> Users
+                </button>
+
+                <button class="nav-item" data-target="panel-messages">
+                    <span class="nav-icon">💬</span> Messages
+                    <span id="messages-badge" class="unread-badge hidden">0</span>
+                </button>
+            </nav>
+
+            <button id="agent-logout-btn" class="text-btn outline logout-sidebar">Log Out</button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Users Panel -->
+            <div id="panel-users" class="content-panel active">
+                <header class="welcome-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h2 style="font-size: 26px; font-weight: 800;">Users Directory</h2>
+                        <p style="color: var(--text-muted); margin-top: 5px;">Manage bank accounts and view client profiles.</p>
+                    </div>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="header-welcome">Welcome, Agent 007</div>
+                        <button id="agent-refresh-btn" class="refresh-btn" title="Refresh Users">🔄</button>
+                    </div>
+                </header>
+
+                <!-- Summary Cards Row -->
+                <div class="summary-cards-row">
+                    <div class="summary-card">
+                        <div class="card-icon-wrapper icon-users">👥</div>
+                        <div class="card-content">
+                            <h3>Total Users</h3>
+                            <div class="card-value" id="stat-total-users">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon-wrapper icon-balance">🟢</div>
+                        <div class="card-content">
+                            <h3>System Status</h3>
+                            <div class="card-value" style="font-size: 20px; color: var(--success);">Operational</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon-wrapper icon-accounts">💳</div>
+                        <div class="card-content">
+                            <h3>Total Accounts</h3>
+                            <div class="card-value" id="stat-total-accounts">0</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon-wrapper icon-time">⏱️</div>
+                        <div class="card-content">
+                            <h3>Last Updated</h3>
+                            <div class="card-value" id="stat-last-updated" style="font-size: 14px; font-weight: 700; margin-top: 5px;">--:--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Bar Container -->
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-bar" placeholder="🔍 Search users by username or account number...">
+                </div>
+
+                <!-- Users Table -->
+                <div class="table-wrapper">
+                    <table class="users-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Account Number</th>
+                                <th>Balance</th>
+                                <th>Date Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--text-muted);">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Messages Panel -->
+            <div id="panel-messages" class="content-panel hidden">
+                <header class="welcome-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h2 style="font-size: 26px; font-weight: 800;">Customer Messages</h2>
+                        <p style="color: var(--text-muted); margin-top: 5px;">Inquiries and support requests from the public site.</p>
+                    </div>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="header-welcome">Welcome, Agent 007</div>
+                        <button id="agent-refresh-messages-btn" class="refresh-btn" title="Refresh Messages">🔄</button>
+                    </div>
+                </header>
+
+                <div class="table-wrapper">
+                    <table class="users-table" id="messages-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th style="width: 150px;">Name</th>
+                                <th style="width: 200px;">Email</th>
+                                <th>Message</th>
+                                <th style="width: 180px;">Date & Time</th>
+                                <th style="width: 150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="messages-table-body">
+                            <tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--text-muted);">Loading messages...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- View User Modal Overlay -->
+    <div id="detail-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 style="font-size: 20px; font-weight: 800; color: var(--bg-dark);">User Profile Details</h2>
+                <button id="modal-close-btn" class="modal-close">&times;</button>
+            </div>
+            
+            <div class="modal-section-title">Account Information</div>
+            <div class="user-info-grid">
+                <div class="info-item">
+                    <h4>User ID</h4>
+                    <p id="modal-user-id">-</p>
+                </div>
+                <div class="info-item">
+                    <h4>Username</h4>
+                    <p id="modal-username">-</p>
+                </div>
+                <div class="info-item">
+                    <h4>Account Number</h4>
+                    <p id="modal-account-number">-</p>
+                </div>
+                <div class="info-item">
+                    <h4>Current Balance</h4>
+                    <p id="modal-balance" class="balance-accent">-</p>
+                </div>
+                <div class="info-item">
+                    <h4>Date Joined</h4>
+                    <p id="modal-date-joined">-</p>
+                </div>
+                <div class="info-item">
+                    <h4>Account Status</h4>
+                    <p id="modal-status" style="color: var(--success); font-weight: 700;">Active</p>
+                </div>
+            </div>
+            
+            <div class="modal-section-title">Recent Transactions</div>
+            <div style="max-height: 250px; overflow-y: auto; border: 1px solid #edf2f7; border-radius: 12px; margin-bottom: 10px;">
+                <table class="modal-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modal-transactions-body">
+                        <tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-muted);">No transactions logged yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- jsPDF and jsPDF AutoTable CDN script tags -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="agent-script.js"></script>
+</body>
+</html>

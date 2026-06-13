@@ -18,7 +18,7 @@
          ========================================== -->
     <div id="landing-view" class="view active landing-page">
         <!-- Hero Section with Gradient Background -->
-        <div class="hero-wrapper">
+        <div id="hero" class="hero-wrapper">
             <div class="hero-bg-curve"></div>
 
             <!-- Top Navigation -->
@@ -34,7 +34,11 @@
                     <a href="#features">Features</a>
                     <a href="#pricing">Pricing</a>
                 </div>
-                <button id="nav-login-btn" class="accent-btn">Sign up</button>
+                <div style="display: flex; gap: 10px;">
+                    <button id="nav-agent-login-btn" class="outline-btn"
+                        style="color: white; border-color: white;">Agent Login</button>
+                    <button id="nav-login-btn" class="accent-btn">Sign up</button>
+                </div>
             </nav>
 
             <!-- Hero Content -->
@@ -85,10 +89,35 @@
                     your finances.</p>
             </div>
             <div class="split-visual">
-                <div class="visual-card-large" style="background: linear-gradient(135deg, #a78bfa, #4c1d95);">
-                    <div style="font-size: 14px; opacity: 0.8;">DP Studios</div>
-                    <div style="font-size: 18px; margin-top: auto; font-weight: 600; font-family: monospace;">1234 ****
-                        **** 5678</div>
+                <!-- Section Background blobs -->
+                <div class="features-bg-blob blob-1"></div>
+                <div class="features-bg-blob blob-2"></div>
+
+                <!-- Stacked Cards Container -->
+                <div class="features-card-stack">
+                    <div class="features-card features-card-back"></div>
+                    <div class="features-card features-card-front">
+                        <!-- Internal card blob decorations -->
+                        <div class="card-blob card-blob-pink"></div>
+                        <div class="card-blob card-blob-yellow"></div>
+                        <div class="card-blob card-blob-white"></div>
+
+                        <!-- Top glassmorphic shine -->
+                        <div class="card-shine"></div>
+
+                        <!-- Card Contents -->
+                        <div class="card-row-top">
+                            <div class="card-chip"></div>
+                            <div class="card-logo">DP Bank</div>
+                        </div>
+
+                        <div class="card-number">**** **** **** 4479</div>
+
+                        <div class="card-row-bottom">
+                            <div class="card-holder">D. Harven</div>
+                            <div class="card-expiry">12/28</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -128,25 +157,23 @@
         </section>
 
         <!-- Section 3: Support in 5 languages -->
-        <section class="split-section">
+        <section id="support" class="split-section">
             <div class="split-content">
-                <h2>We support you<br>in 5 different<br>languages</h2>
-                <p>Our support team is here to help you in 5 languages - English, French, Spanish, Polish, and German.
-                </p>
-                <div class="mockup-avatars" style="align-items: center;">
-                    <div class="mockup-avatar"
-                        style="background: #e2e8f0; margin-right: -20px; border: 2px solid white; position: relative; z-index: 1;">
-                    </div>
-                    <div class="mockup-avatar"
-                        style="background: #cbd5e1; margin-right: -20px; border: 2px solid white; position: relative; z-index: 2;">
-                    </div>
-                    <div class="mockup-avatar"
-                        style="background: #94a3b8; margin-right: -20px; border: 2px solid white; position: relative; z-index: 3;">
-                    </div>
-                    <div class="mockup-avatar"
-                        style="background: #64748b; border: 2px solid white; position: relative; z-index: 4;"></div>
-                    <span style="margin-left: 10px; color: var(--text-muted); font-weight: 600;">+20</span>
+                <h2>Safe & Strong Support,<br>Available 24/7</h2>
+                <p>Our dedicated support team is always here for you, day or night. Whether you have a question, face an
+                    issue, or need urgent help — we respond fast, we respond safe, and we never leave you alone.</p>
+
+                <div class="contact-label"
+                    style="font-weight: 700; font-size: 14px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 15px; letter-spacing: 0.5px;">
+                    Contact Us Through</div>
+
+                <div class="contact-badges-row">
+                    <div class="contact-badge badge-email">📧 Email</div>
+                    <div class="contact-badge badge-chat">💬 Live Chat</div>
+                    <div class="contact-badge badge-phone">📞 Phone</div>
                 </div>
+
+                <div class="contact-trust-text">🔒 All communications are encrypted and 100% secure</div>
             </div>
             <div class="split-visual">
                 <div class="visual-chat">
@@ -160,50 +187,56 @@
         <!-- Section 4: Pricing -->
         <section id="pricing" class="pricing-section">
             <h2>An exceptional service, <span>at the right place</span></h2>
-            <p style="color: var(--text-muted); margin-bottom: 60px;">Start with a free plan and switch to premium as
-                you grow.</p>
+            <p class="pricing-subtitle">Start with a free plan and switch to premium as you grow.</p>
             <div class="pricing-grid">
                 <!-- Free Plan -->
-                <div class="pricing-card">
+                <div class="pricing-card pricing-free">
+                    <!-- Glassmorphic shine -->
+                    <div class="price-card-shine"></div>
+                    <!-- Internal card blob decorations -->
+                    <div class="price-card-blob blob-white"></div>
+                    <div class="price-card-blob blob-purple"></div>
+
                     <h3>Free</h3>
                     <div class="price">₹0<span>/m</span></div>
-                    <p class="desc">Manage your business with a simple and efficient account.</p>
-                    <button class="outline-btn" style="width: 100%; margin-bottom: 30px;">Get started</button>
-                    <div class="mockup-card" style="margin: 0; height: 80px;"></div>
+                    <p class="desc">Manage your money with a simple and efficient account.</p>
+                    <button class="price-btn btn-free">Get started</button>
                     <ul class="pricing-features">
                         <li>10 free local transfers</li>
-                        <li>Free ATM withdrawals up to ₹250</li>
+                        <li>Free ATM withdrawals up to ₹25000</li>
                         <li>Free payments to DP accounts</li>
                         <li>Prepaid debit cards</li>
-                        <li class="disabled">Virtual cards</li>
-                        <li class="disabled">Priority 24/7 support</li>
-                        <li class="disabled">Exchange 24 currencies</li>
-                        <li class="disabled">Multi-user access</li>
+                        <li>24/7 basic support</li>
                     </ul>
                 </div>
                 <!-- Premium Plan -->
-                <div class="pricing-card">
+                <div class="pricing-card pricing-premium">
+                    <!-- Glassmorphic shine -->
+                    <div class="price-card-shine"></div>
+                    <!-- Internal card blob decorations -->
+                    <div class="price-card-blob blob-white"></div>
+                    <div class="price-card-blob blob-pink"></div>
+
+                    <!-- Most Popular Badge -->
+                    <div class="popular-badge">Most Popular</div>
+
                     <h3>Premium</h3>
                     <div class="price">₹10<span>/m</span></div>
-                    <p class="desc">Priority support and multi-user access to maximize your productivity.</p>
-                    <button class="outline-btn" style="width: 100%; margin-bottom: 30px;">Get started</button>
-                    <div class="mockup-card" style="margin: 0; height: 80px;"></div>
+                    <p class="desc">Priority support and wealth management to maximize your savings.</p>
+                    <button class="price-btn btn-premium">Get started</button>
                     <ul class="pricing-features">
-                        <li>10 free local transfers</li>
-                        <li>Free ATM withdrawals up to ₹250</li>
-                        <li>Free payments to DP accounts</li>
-                        <li>Prepaid debit cards</li>
-                        <li>Virtual cards</li>
+                        <li>Unlimited local transfers</li>
                         <li>Priority 24/7 support</li>
-                        <li>Exchange 24 currencies</li>
-                        <li>Multi-user access</li>
+                        <li>High ATM limit withdrawals</li>
+                        <li>Free virtual cards</li>
+                        <li>Wealth & multi-currency access</li>
                     </ul>
                 </div>
             </div>
         </section>
 
         <!-- Section 5: FAQ -->
-        <section class="faq-section">
+        <section id="faq" class="faq-section">
             <h2>Frequently <span>asked questions</span></h2>
             <p>If you are not sure whether DP Bank is suitable for you or not, do not worry. We are here to explain
                 everything you might want to know.</p>
@@ -234,49 +267,152 @@
 
         <!-- Footer -->
         <footer class="public-footer">
+            <!-- Footer background blobs -->
+            <div class="footer-blob blob-1"></div>
+            <div class="footer-blob blob-2"></div>
+            
             <div class="footer-grid">
-                <div style="flex: 1; min-width: 250px;">
-                    <div class="logo-small nav-logo" style="margin-bottom: 20px;">
+                <!-- Column 1: Brand Info -->
+                <div class="footer-brand-col">
+                    <div class="logo-small nav-logo" style="margin-bottom: 20px; color: white;">
                         <div class="logo-icon-small"
-                            style="background: var(--primary); -webkit-text-fill-color: white; padding: 0 8px; border-radius: 8px;">
+                            style="background: white; -webkit-text-fill-color: var(--primary); padding: 0 8px; border-radius: 8px;">
                             DP</div>
-                        <span style="color: var(--text-main);">Bank</span>
+                        <span style="color: white;">Bank</span>
                     </div>
-                    <div style="margin-top: 40px; font-size: 13px; color: var(--text-muted);">
-                        Copyright © 2026 DP Bank LLC.<br>All rights reserved.
+                    <p class="footer-desc">
+                        The future of banking is here. Safe, smart and always available for you 24/7.
+                    </p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-icon">𝕏</a>
+                        <a href="#" class="social-icon">📷</a>
+                        <a href="#" class="social-icon">💼</a>
+                        <a href="#" class="social-icon">💬</a>
                     </div>
                 </div>
-                <div class="footer-links" style="flex: 2;">
-                    <div class="footer-col">
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Team</a>
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Press</a>
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Fees</a>
-                    </div>
-                    <div class="footer-col">
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Services</a>
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Projects</a>
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Affiliate</a>
-                    </div>
-                    <div class="footer-col">
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Terms
-                            of use</a>
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Privacy
-                            Policy</a>
-                        <a href="#"
-                            style="color: var(--text-main); text-decoration: none; font-size: 14px; display: block; margin-bottom: 12px;">Contact
-                            us</a>
+
+                <!-- Column 2: Quick Links -->
+                <div class="footer-links-col">
+                    <h4>Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#hero">About Us</a>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#support">Contact Us</a>
+                </div>
+
+                <!-- Column 3: Account -->
+                <div class="footer-links-col">
+                    <h4>Account</h4>
+                    <a href="javascript:void(0)" onclick="openFooterLogin()">Login</a>
+                    <a href="javascript:void(0)" onclick="openFooterSignUp()">Sign Up</a>
+                    <a href="javascript:void(0)" onclick="openFooterAgentLogin()">Agent Login</a>
+                    <a href="javascript:void(0)" onclick="openFooterForgotPassword()">Forgot Password</a>
+                    <a href="javascript:void(0)" onclick="openFooterDashboard()">Dashboard</a>
+                </div>
+
+                <!-- Column 4: Legal & Info -->
+                <div class="footer-links-col">
+                    <h4>Legal & Info</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Security Policy</a>
+                    <a href="#">Refund Policy</a>
+                </div>
+
+                <!-- Column 5: Contact & Support -->
+                <div class="footer-contact-col">
+                    <h4>Contact & Support</h4>
+                    <p style="font-size: 13px; font-weight: 600; color: white; margin-bottom: 8px;">Send us a message</p>
+                    <form id="footer-contact-form" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
+                        <input type="text" id="contact-name" placeholder="Your name" required class="contact-input">
+                        <input type="email" id="contact-email" placeholder="Your email" required class="contact-input">
+                        <textarea id="contact-message" placeholder="Your message..." rows="3" required class="contact-input contact-textarea" style="resize: none;"></textarea>
+                        <button type="submit" class="contact-submit-btn">Send Message</button>
+                        <div id="contact-form-status" style="font-size: 12px; margin-top: 5px; font-weight: 600;"></div>
+                    </form>
+                    <div style="font-size: 12px; color: #a0aec0; line-height: 1.6; display: flex; flex-direction: column; gap: 4px;">
+                        <div>📧 support@dpbank.com</div>
+                        <div>📞 1800-DP-BANK (Toll Free)</div>
+                        <div>🕐 Available 24/7</div>
+                        <div>📍 New Delhi, India</div>
                     </div>
                 </div>
             </div>
+
+            <!-- Divider line -->
+            <div class="footer-divider"></div>
+
+            <!-- Bottom bar -->
+            <div class="footer-bottom-bar">
+                <div class="bottom-left">© 2026 DP Bank. All rights reserved.</div>
+                <div class="bottom-center">Made with ❤️ in India</div>
+                <div class="bottom-right">
+                    <a href="#">Privacy Policy</a> · 
+                    <a href="#">Terms</a> · 
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
         </footer>
+
+        <!-- Helper Scripts for Account Actions -->
+        <script>
+            function openFooterLogin() {
+                const navBtn = document.getElementById('nav-login-btn');
+                if (navBtn) navBtn.click();
+                const title = document.getElementById('form-title');
+                const toggle = document.getElementById('toggle-btn');
+                if (title && toggle && title.textContent.includes('Create')) {
+                    toggle.click();
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            function openFooterSignUp() {
+                const navBtn = document.getElementById('nav-login-btn');
+                if (navBtn) navBtn.click();
+                const title = document.getElementById('form-title');
+                const toggle = document.getElementById('toggle-btn');
+                if (title && toggle && title.textContent.includes('Log in')) {
+                    toggle.click();
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            function openFooterAgentLogin() {
+                const agentBtn = document.getElementById('nav-agent-login-btn');
+                if (agentBtn) agentBtn.click();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            function openFooterForgotPassword() {
+                const navBtn = document.getElementById('nav-login-btn');
+                if (navBtn) navBtn.click();
+                const title = document.getElementById('form-title');
+                const toggle = document.getElementById('toggle-btn');
+                if (title && toggle && title.textContent.includes('Create')) {
+                    toggle.click();
+                }
+                const forgotBtn = document.getElementById('show-forgot-btn');
+                if (forgotBtn) forgotBtn.click();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            function openFooterDashboard() {
+                if (localStorage.getItem('auth_token')) {
+                    const views = document.querySelectorAll('.view');
+                    views.forEach(v => {
+                        v.classList.remove('active');
+                        v.classList.add('hidden');
+                    });
+                    const dbView = document.getElementById('dashboard-view');
+                    if (dbView) {
+                        dbView.classList.remove('hidden');
+                        dbView.classList.add('active');
+                    }
+                } else {
+                    openFooterLogin();
+                }
+            }
+        </script>
     </div>
 
     <!-- ==========================================
@@ -356,6 +492,79 @@
     </div>
 
     <!-- ==========================================
+         AGENT AUTHENTICATION VIEW
+         ========================================== -->
+    <div id="agent-auth-view" class="view hidden">
+        <div class="glass-card auth-card">
+            <button id="agent-back-to-home-btn" class="text-btn back-btn">← Back to Home</button>
+
+            <div class="logo-container" style="margin-top: 20px;">
+                <div class="logo-icon">DP</div>
+                <h1 style="font-size: 24px;">Bank</h1>
+                <span
+                    style="font-size: 12px; font-weight: bold; margin-left: 8px; padding: 2px 6px; background: var(--accent); color: white; border-radius: 4px;">AGENT</span>
+            </div>
+
+            <p class="subtitle" id="agent-form-title" style="color: var(--text-muted); margin-bottom: 24px;">Agent
+                Portal Access</p>
+
+            <form id="agent-auth-form">
+                <div class="input-group">
+                    <label for="agent-code">Agent Code</label>
+                    <input type="text" id="agent-code" required placeholder="Enter agent code">
+                </div>
+
+                <div class="input-group">
+                    <label for="agent-password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="agent-password" required placeholder="Enter password">
+                        <button type="button" class="eye-toggle" aria-label="Toggle password visibility">
+                            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <line class="eye-slash" x1="2" y1="2" x2="22" y2="22"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;" id="agent-forgot-password-wrapper">
+                        <button type="button" id="agent-show-forgot-btn" class="text-btn"
+                            style="font-size: 12px; font-weight: 500;">Forgot Password?</button>
+                    </div>
+                </div>
+
+                <button type="submit" id="agent-submit-btn" class="primary-btn auth-submit-btn">Log In</button>
+            </form>
+
+            <form id="agent-forgot-password-form" class="hidden" style="display:none;">
+                <div class="input-group">
+                    <label for="agent-forgot-code">Agent Code</label>
+                    <input type="text" id="agent-forgot-code" required placeholder="Enter agent code">
+                </div>
+                <div class="input-group">
+                    <label for="agent-forgot-new-password">New Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="agent-forgot-new-password" required placeholder="Enter new password">
+                        <button type="button" class="eye-toggle" aria-label="Toggle password visibility">
+                            <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <line class="eye-slash" x1="2" y1="2" x2="22" y2="22"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" id="agent-forgot-submit-btn" class="primary-btn auth-submit-btn">Reset
+                    Password</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button type="button" id="agent-back-to-login-btn" class="text-btn">Back to Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
          DASHBOARD VIEW (Private Portal)
          ========================================== -->
     <div id="dashboard-view" class="view hidden">
@@ -372,9 +581,7 @@
                     <button class="nav-item active" data-target="panel-home">
                         <span class="nav-icon">⌂</span> Home
                     </button>
-                    <button class="nav-item" data-target="panel-transactions">
-                        <span class="nav-icon">📋</span> Transactions
-                    </button>
+
                     <button class="nav-item" data-target="panel-transfer">
                         <span class="nav-icon">↗</span> Send Money
                     </button>
@@ -391,11 +598,16 @@
 
                 <!-- Home Panel -->
                 <div id="panel-home" class="content-panel active">
-                    <header class="welcome-header">
-                        <h2 style="font-size: 26px; font-weight: 800;">Welcome back, <span id="user-display-name"
-                                style="color: var(--primary);">User</span></h2>
-                        <p style="color: var(--text-muted); margin-top: 5px;">Here is your complete financial summary.
-                        </p>
+                    <header class="welcome-header"
+                        style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h2 style="font-size: 26px; font-weight: 800;">Welcome back, <span id="user-display-name"
+                                    style="color: var(--primary);">User</span></h2>
+                            <p style="color: var(--text-muted); margin-top: 5px;">Here is your complete financial
+                                summary.
+                            </p>
+                        </div>
+                        <button id="user-refresh-btn" class="refresh-btn" title="Refresh Dashboard">🔄</button>
                     </header>
 
                     <!-- Virtual Card for Total Balance -->
@@ -455,15 +667,13 @@
                                     style="font-size: 14px; font-weight: 500;">pts</span></p>
                         </div>
                     </div>
-                </div>
 
-                <!-- Transactions Panel -->
-                <div id="panel-transactions" class="content-panel hidden">
-                    <header class="welcome-header">
-                        <h2 style="font-size: 22px;">Transaction History</h2>
-                        <p>Real-time updates of your recent activity.</p>
-                    </header>
-                    <div class="glass-card transactions-container" id="transactions-list">
+                    <!-- Recent Transactions (Moved to Home Panel) -->
+                    <h3
+                        style="font-size: 18px; margin-top: 40px; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 10px;">
+                        Recent Transactions</h3>
+                    <div class="glass-card transactions-container" id="transactions-list"
+                        style="max-height: 400px; overflow-y: auto;">
                         <div class="loading-text">Loading transactions...</div>
                     </div>
                 </div>
