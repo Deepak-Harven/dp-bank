@@ -42,6 +42,22 @@ function formatCurrency(amount) {
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
 }
 
+// Helper to parse date robustly across SQLite and PostgreSQL
+function parseAndFormatDate(timestamp, locale = 'en-IN') {
+    if (!timestamp) return '---';
+    let dateStr = timestamp;
+    if (typeof dateStr === 'string') {
+        if (dateStr.includes(' ') && !dateStr.includes('T')) {
+            dateStr = dateStr.replace(' ', 'T');
+        }
+        if (!dateStr.endsWith('Z') && !/[+-]\d{2}:?\d{2}$/.test(dateStr)) {
+            dateStr += 'Z';
+        }
+    }
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? 'Invalid Date' : d.toLocaleString(locale);
+}
+
 // Generate consistent join dates based on User ID
 function getSimulatedJoinDate(userId) {
     const baseDate = new Date(2026, 4, 1); // 1st May 2026
@@ -162,7 +178,7 @@ async function viewUser(userId) {
             const isDeposit = tx.type === 'deposit';
             const sign = isDeposit ? '+' : '-';
             const amountColor = isDeposit ? 'var(--success)' : 'var(--error)';
-            const formattedDate = new Date(tx.timestamp + 'Z').toLocaleString('en-IN');
+            const formattedDate = parseAndFormatDate(tx.timestamp);
 
             return `
                 <tr>
@@ -262,7 +278,7 @@ async function downloadPDF(userId) {
             const isDeposit = tx.type === 'deposit';
             const sign = isDeposit ? '+' : '-';
             const formattedAmount = `${sign}INR ${tx.amount.toFixed(2)}`;
-            const date = new Date(tx.timestamp + 'Z').toLocaleString('en-IN');
+            const date = parseAndFormatDate(tx.timestamp);
             return [
                 tx.type.toUpperCase(),
                 formattedAmount,
@@ -460,7 +476,7 @@ function renderMessages(messages) {
     }
 
     messagesTableBody.innerHTML = messages.map(msg => {
-        const formattedDate = new Date(msg.created_at + 'Z').toLocaleString('en-IN');
+        const formattedDate = parseAndFormatDate(msg.created_at);
         const isUnread = msg.status === 'unread';
         const actionButton = isUnread 
             ? `<button class="btn-read" onclick="markMessageAsRead(${msg.id})">✔️ Read</button>` 

@@ -254,6 +254,22 @@ navItems.forEach(btn => {
     });
 });
 
+// Helper to parse date robustly across SQLite and PostgreSQL
+function parseAndFormatDate(timestamp, locale) {
+    if (!timestamp) return '---';
+    let dateStr = timestamp;
+    if (typeof dateStr === 'string') {
+        if (dateStr.includes(' ') && !dateStr.includes('T')) {
+            dateStr = dateStr.replace(' ', 'T');
+        }
+        if (!dateStr.endsWith('Z') && !/[+-]\d{2}:?\d{2}$/.test(dateStr)) {
+            dateStr += 'Z';
+        }
+    }
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? 'Invalid Date' : (locale ? d.toLocaleString(locale) : d.toLocaleString());
+}
+
 async function loadTransactions() {
     if (!currentUsername) return;
     txList.innerHTML = '<div class="loading-text">Loading transactions...</div>';
@@ -273,7 +289,7 @@ async function loadTransactions() {
             const classColor = isDeposit ? 'positive' : 'negative';
             const iconClass = isDeposit ? 'deposit' : 'withdraw';
             const iconChar = isDeposit ? '↓' : '↑';
-            const date = new Date(tx.timestamp + 'Z').toLocaleString();
+            const date = parseAndFormatDate(tx.timestamp);
             
             return `
                 <div class="transaction-item">
