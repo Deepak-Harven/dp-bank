@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const db = new sqlite3.Database('./database.db', (err) => {
+const db = new sqlite3.Database(process.env.DATABASE_PATH || './database.db', (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
     } else {
