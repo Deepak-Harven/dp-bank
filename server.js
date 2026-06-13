@@ -14,40 +14,216 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const db = new sqlite3.Database(process.env.DATABASE_PATH || './database.db', (err) => {
-    if (err) {
-        console.error('Error opening database:', err.message);
-    } else {
-        console.log('Connected to the SQLite database.');
-        
-        // Users Table - Added account_number
-        db.run(`CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT,
-            balance REAL,
-            account_number TEXT UNIQUE
-        )`);
-
-        db.run(`CREATE TABLE IF NOT EXISTS transactions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT,
-            type TEXT,
-            amount REAL,
-            description TEXT,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`);
-
-        db.run(`CREATE TABLE IF NOT EXISTS contact_messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            email TEXT,
-            message TEXT,
-            status TEXT DEFAULT 'unread',
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`);
+class DatabaseAdapter {
+    constructor() {
+        this.isPostgres = !!process.env.DATABASE_URL;
+        if (this.isPostgres) {
+            console.log('Using PostgreSQL database.');
+            const { Pool } = require('pg');
+            this.pool = new Pool({
+                connectionString: process.env.DATABASE_URL,
+                ssl: {
+                    rejectUnauthorized: false
+                }
+            });
+        } else {
+            console.log('Using SQLite database.');
+            this.db = new sqlite3.Database(process.env.DATABASE_PATH || './database.db', (err) => {
+                if (err) console.error('Error opening SQLite database:', err.message);
+            });
+        }
     }
-});
+
+    init(callback) {
+        if (this.isPostgres) {
+            const createUsersTable = `
+                CREATE TABLE IF NOT EXISTS users (
+                    id SERIAL PRIMARY KEY,
+                    username VARCHAR(255) UNIQUE,
+                    password VARCHAR(255),
+                    balance DOUBLE PRECISION,
+                    account_number VARCHAR(255) UNIQUE
+                )
+            `;
+            const createTransactionsTable = `
+                CREATE TABLE IF NOT EXISTS transactions (
+                    id SERIAL PRIMARY KEY,
+                    username VARCHAR(255),
+                    type VARCHAR(255),
+                    amount DOUBLE PRECISION,
+                    description TEXT,
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            `;
+            const createContactMessagesTable = `
+                CREATE TABLE IF NOT EXISTS contact_messages (
+                    id SERIAL PRIMARY KEY,
+                    name VARCHAR(255),
+                    email VARCHAR(255),
+                    message TEXT,
+                    status VARCHAR(50) DEFAULT 'unread',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            `;
+
+            (async () => {
+                try {
+                    await this.pool.query(createUsersTable);
+                    await this.pool.query(createTransactionsTable);
+                    await this.pool.query(createContactMessagesTable);
+                    console.log('PostgreSQL tables initialized.');
+                    if (callback) callback();
+                } catch (err) {
+                    console.error('Error initializing PostgreSQL tables:', err);
+                    if (callback) callback(err);
+                }
+            })();
+        } else {
+            this.db.serialize(() => {
+                this.db.run(`CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT UNIQUE,
+                    password TEXT,
+                    balance REAL,
+                    account_number TEXT UNIQUE
+                )`);
+
+                this.db.run(`CREATE TABLE IF NOT EXISTS transactions (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT,
+                    type TEXT,
+                    amount REAL,
+                    description TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )`);
+
+                this.db.run(`CREATE TABLE IF NOT EXISTS contact_messages (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT,
+                    email TEXT,
+                    message TEXT,
+                    status TEXT DEFAULT 'unread',
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )`);
+                
+                console.log('SQLite tables initialized.');
+                if (callback) callback();
+            });
+        }
+    }
+
+    convertQuery(sql) {
+        if (!this.isPostgres) return sql;
+        let index = 1;
+        return sql.replace(/\?/g, () => `$${index++}`);
+    }
+
+    run(sql, params, callback) {
+        if (this.isPostgres) {
+            const converted = this.convertQuery(sql);
+            this.pool.query(converted, params, (err, res) => {
+                if (callback) {
+                    callback(err, res ? { lastID: null, changes: res.rowCount } : null);
+                }
+            });
+        } else {
+            this.db.run(sql, params, callback);
+        }
+    }
+
+    get(sql, params, callback) {
+        if (this.isPostgres) {
+            const converted = this.convertQuery(sql);
+            this.pool.query(converted, params, (err, res) => {
+                if (callback) {
+                    callback(err, res && res.rows ? res.rows[0] : null);
+                }
+            });
+        } else {
+            this.db.get(sql, params, callback);
+        }
+    }
+
+    all(sql, params, callback) {
+        if (this.isPostgres) {
+            const converted = this.convertQuery(sql);
+            this.pool.query(converted, params, (err, res) => {
+                if (callback) {
+                    callback(err, res && res.rows ? res.rows : []);
+                }
+            });
+        } else {
+            this.db.all(sql, params, callback);
+        }
+    }
+
+    transferTransaction(fromUser, toAccount, amount, recipientUsername, callback) {
+        if (this.isPostgres) {
+            (async () => {
+                const client = await this.pool.connect();
+                try {
+                    await client.query('BEGIN');
+                    
+                    // Deduct from sender
+                    await client.query('UPDATE users SET balance = balance - $1 WHERE username = $2', [amount, fromUser]);
+                    
+                    // Add to recipient
+                    await client.query('UPDATE users SET balance = balance + $1 WHERE account_number = $2', [amount, toAccount]);
+                    
+                    // Log transactions
+                    await client.query(
+                        'INSERT INTO transactions (username, type, amount, description) VALUES ($1, $2, $3, $4)', 
+                        [fromUser, 'withdraw', amount, `Transfer to A/C: ${toAccount}`]
+                    );
+                    await client.query(
+                        'INSERT INTO transactions (username, type, amount, description) VALUES ($1, $2, $3, $4)', 
+                        [recipientUsername, 'deposit', amount, `Transfer from ${fromUser}`]
+                    );
+                    
+                    await client.query('COMMIT');
+                    
+                    // Fetch new balance
+                    const balanceRes = await client.query('SELECT balance FROM users WHERE username = $1', [fromUser]);
+                    const newBalance = balanceRes.rows[0]?.balance || 0;
+                    
+                    callback(null, newBalance);
+                } catch (err) {
+                    await client.query('ROLLBACK');
+                    callback(err);
+                } finally {
+                    client.release();
+                }
+            })();
+        } else {
+            this.db.serialize(() => {
+                this.db.run('BEGIN TRANSACTION');
+                this.db.run(`UPDATE users SET balance = balance - ? WHERE username = ?`, [amount, fromUser]);
+                this.db.run(`UPDATE users SET balance = balance + ? WHERE account_number = ?`, [amount, toAccount]);
+                
+                // Log transactions
+                this.db.run(
+                    `INSERT INTO transactions (username, type, amount, description) VALUES (?, ?, ?, ?)`,
+                    [fromUser, 'withdraw', amount, `Transfer to A/C: ${toAccount}`]
+                );
+                this.db.run(
+                    `INSERT INTO transactions (username, type, amount, description) VALUES (?, ?, ?, ?)`,
+                    [recipientUsername, 'deposit', amount, `Transfer from ${fromUser}`]
+                );
+                
+                this.db.run('COMMIT', (err) => {
+                    if (err) return callback(err);
+                    this.db.get(`SELECT balance FROM users WHERE username = ?`, [fromUser], (err, row) => {
+                        if (err) return callback(err);
+                        callback(null, row ? row.balance : 0);
+                    });
+                });
+            });
+        }
+    }
+}
+
+const db = new DatabaseAdapter();
+db.init();
 
 function logTransaction(username, type, amount, description, callback) {
     db.run(
@@ -187,20 +363,9 @@ app.post('/api/transfer', (req, res) => {
             if (err || !recipient) return res.status(400).json({ error: 'Recipient account number not found' });
 
             // Perform transfer in a transaction
-            db.serialize(() => {
-                db.run('BEGIN TRANSACTION');
-                db.run(`UPDATE users SET balance = balance - ? WHERE username = ?`, [amount, fromUser]);
-                db.run(`UPDATE users SET balance = balance + ? WHERE account_number = ?`, [amount, toAccount]);
-                
-                logTransaction(fromUser, 'withdraw', amount, `Transfer to A/C: ${toAccount}`, () => {});
-                logTransaction(recipient.username, 'deposit', amount, `Transfer from ${fromUser}`, () => {});
-                
-                db.run('COMMIT', (err) => {
-                    if (err) return res.status(500).json({ error: 'Transfer failed' });
-                    db.get(`SELECT balance FROM users WHERE username = ?`, [fromUser], (err, newSender) => {
-                        res.status(200).json({ message: 'Transfer successful', balance: newSender.balance });
-                    });
-                });
+            db.transferTransaction(fromUser, toAccount, amount, recipient.username, (err, newSenderBalance) => {
+                if (err) return res.status(500).json({ error: 'Transfer failed' });
+                res.status(200).json({ message: 'Transfer successful', balance: newSenderBalance });
             });
         });
     });
